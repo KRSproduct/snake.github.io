@@ -14,9 +14,9 @@
 
 		var dx = 0;
 		var dy = -10;
-
+		var movementChange = false;
 		var foodX;
-    var foodY;
+		var foodY;
 
 		var score = 0;
 
@@ -32,6 +32,7 @@
 		function main() {
 			if (didGameEnd()) return;
 			setTimeout(function onTick() {
+				movementChange = false;
 				clearCanvas();
 				drawFood();
 				advanceSnake();
@@ -93,9 +94,10 @@
 		var RIGHT_KEY = 39;
 		var UP_KEY = 38;
 		var DOWN_KEY = 40;
-
-
-
+		
+		if(movementChange) return;
+      movementChange = true;
+      
 		var keyPressed = event.keyCode;
 		var goingUp = dy === -10;
 		var goingDown = dy === 10;
@@ -122,8 +124,6 @@
 			dy = 10;
 		}
 	}
-
-
 
 	function randomTen(min, max) {
 		return Math.round((Math.random() * (max-min) + min) / 10) * 10;
