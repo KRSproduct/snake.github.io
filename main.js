@@ -1,4 +1,4 @@
-		var move            = 150;
+		var move            = 100;
 		var wrapper_brcolor = 'black';
 		var wrapper_color		= "white";
 		var snake_color 		= 'gray';
@@ -11,6 +11,8 @@
 		{x: 10, y: 280},
 		{x: 10, y: 290}
 		];
+
+		const L = 30;
 
 		var dx = 0;
 		var dy = -10;
@@ -30,7 +32,7 @@
 		document.addEventListener("keydown", changeDirection);
 
 		function main() {
-			if (didGameEnd()) return;
+			if (isGameEnd()) return;
 			setTimeout(function onTick() {
 				movementChange = false;
 				clearCanvas();
@@ -48,23 +50,31 @@
 			ctx.strokeRect(0, 0, gameCanvas.width, gameCanvas.height);
 		}
 
+		function speedUp(){
+			if(move <= 50) return;
+			move -= 2;
+		}
+
 
 		function advanceSnake() {
-			var head = {x: snake[0].x + dx, y: snake[0].y + dy};
-			snake.unshift(head);
+			if (snake.length <= L) {
+				var head = {x: snake[0].x + dx, y: snake[0].y + dy};
+				snake.unshift(head);
+			}
 
-			var didEatFood = snake[0].x === foodX && snake[0].y === foodY;
-			if (didEatFood) {
+			var isEatFood = snake[0].x === foodX && snake[0].y === foodY;
+			if (isEatFood) {
 				score += 10;
 				document.getElementById('score').innerHTML = score;
 				createFood();
+				speedUp();
 
 			} else {
 				snake.pop();
 			}
 		}
 
-		function didGameEnd() {
+		function isGameEnd() {
 			for (let i = 4; i < snake.length; i++) {
 				if (snake[i].x === snake[0].x && snake[i].y === snake[0].y) return true
 			}
